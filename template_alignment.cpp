@@ -196,7 +196,10 @@ class TemplateAlignment
   printf ("R = | %6.3f %6.3f %6.3f | \n", rotation_ (1,0), rotation_ (1,1), rotation_ (1,2));
   printf ("    | %6.3f %6.3f %6.3f | \n", rotation_ (2,0), rotation_ (2,1), rotation_ (2,2));
   printf ("\n");
-  printf ("t = < %0.3f, %0.3f, %0.3f >\n", translation_ (0), translation_ (1), translation_ (2));
+  printf ("t = < %0.3f, %0.3f, %0.3f >\n", translation_ (0), translation_ (1), translation_ (2));  // 3D rotation before icp
+      
+      
+   // Applying Iterative Closest Point to refine alignment
       
       pcl::IterativeClosestPoint<pcl::PointXYZRGB, pcl::PointXYZRGB> icp ;
       
@@ -218,7 +221,7 @@ icp.setEuclideanFitnessEpsilon (1e-6);
      result.final_transformation = icp.getFinalTransformation()*result.final_transformation ;
      std::cout << "has converged:" << icp.hasConverged() << "score:" << icp.getFitnessScore() << std::endl ;
       Eigen::Matrix3f rotation__ = result.final_transformation.block<3,3>(0, 0);
-  Eigen::Vector3f translation__ = result.final_transformation.block<3,1>(0, 3);
+  Eigen::Vector3f translation__ = result.final_transformation.block<3,1>(0, 3);              // 3D rotation after icp
 
   printf ("\n");
   printf ("    | %6.3f %6.3f %6.3f | \n", rotation__ (0,0), rotation__ (0,1), rotation__ (0,2));
@@ -329,6 +332,9 @@ main (int argc, char **argv)
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempCloud (new pcl::PointCloud<pcl::PointXYZRGB>); 
   vox_grid.filter (*tempCloud);
   cloud = tempCloud; 
+  
+  
+  // Extract the table and remove it from point cloud
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f (new pcl::PointCloud<pcl::PointXYZRGB>);
    pcl::SACSegmentation<pcl::PointXYZRGB> seg;
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
@@ -370,6 +376,8 @@ main (int argc, char **argv)
   }
   
   pcl::io::savePCDFileBinary ("should_be_without_table.pcd", *cloud);
+  
+  
 
   // Assign to the target FeatureCloud
   FeatureCloud target_cloud;
