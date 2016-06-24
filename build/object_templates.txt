@@ -1,0 +1,4 @@
+# A list of point clouds to try aligning
+
+./plane_cluster.pcd
+
