@@ -5,3 +5,7 @@ planar_segmentation.cpp :
 - Gets the normal vector to plane
 - Aligns scene's point cloud such that the ground plane's normal vector is in the direction assigned to gravity (y = -1)
 
+Build folder contains the .pcd files for point clouds captured through Kinect and pcl_ros package.
+To get pcd files, run :
+roslaunch freenect_launch freenect.launch
+rosrun pcl_ros pointcloud_to_pcd input:=/camera/depth_registered/points
