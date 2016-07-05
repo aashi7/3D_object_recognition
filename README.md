@@ -8,5 +8,6 @@ planar_segmentation.cpp :
 Build folder contains the .pcd files for point clouds captured through Kinect and pcl_ros package.
 
 To get pcd files, run :
-roslaunch freenect_launch freenect.launch
-rosrun pcl_ros pointcloud_to_pcd input:=/camera/depth_registered/points
+
+- roslaunch freenect_launch freenect.launch
+- rosrun pcl_ros pointcloud_to_pcd input:=/camera/depth_registered/points
